@@ -6,7 +6,7 @@ import org.junit.Test;
 public class ClinicTest {
 	
 	private static final String FIRST_PATIENT_NAME = "John";
-	private static final int UNSPECIFIED_GRAVITY = 0;
+	private static final int UNSPECIFIED_GRAVITY = 3;
 	private static final String SECOND_PATIENT_NAME = "Luke";
 	private static final int GRAVITY_GREATER_THAN_FIVE = 7;
 	public Clinic clinic;

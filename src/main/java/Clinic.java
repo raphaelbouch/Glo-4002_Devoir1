@@ -2,7 +2,6 @@ import java.util.LinkedList;
 
 public class Clinic {
 	
-	private static final int GRAVITY_FOR_PRIORITY = 6;
 	private LinkedList<String> medecinQueue;
 	private LinkedList<String> radiologyQueue;
 	private TriageType medecinTriageType;
@@ -22,31 +21,19 @@ public class Clinic {
     public void triagePatient(String name, int gravity, VisibleSymptom visibleSymptom) {
     	
     	if (this.medecinTriageType == TriageType.GRAVITY) {
-    		TriageGRAVITY(medecinQueue,name,gravity);
+    		TriageQueue.TriageGRAVITY(medecinQueue,name,gravity);
     	}else if(this.medecinTriageType == TriageType.FIFO) {
-    		TriageFIFO(medecinQueue,name);
+    		TriageQueue.TriageFIFO(medecinQueue,name);
     	}
     	
         if (SymptomRequireRadiology(visibleSymptom)) {
         	if (this.radiologyTriageType == TriageType.GRAVITY) {
-        		TriageGRAVITY(radiologyQueue,name,gravity);
+        		TriageQueue.TriageGRAVITY(radiologyQueue,name,gravity);
         	}else if(this.radiologyTriageType == TriageType.FIFO) {
-        		TriageFIFO(radiologyQueue,name);
+        		TriageQueue.TriageFIFO(radiologyQueue,name);
         	}
         }
     	
-    }
-    
-    private void TriageFIFO(LinkedList<String> queue ,String name) {
-    	queue.add(name);
-    }
-    
-    private void TriageGRAVITY(LinkedList<String> queue, String name, int gravity) {
-    	if (gravity < GRAVITY_FOR_PRIORITY ) {
-    		queue.add(name);
-    	} else {
-    		queue.addFirst(name);
-    	}
     }
     
     public boolean SymptomRequireRadiology(VisibleSymptom visibleSymptom) {
