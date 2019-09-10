@@ -17,10 +17,20 @@ public class ClinicTest {
 	}
 
 	@Test
+	public void WhenOpening_MedecinQueueIsEmpty() {
+		assertNull(clinic.GetPatientMedecinByNumberInQueue(0));
+	}
+	
+	@Test
+	public void WhenOpening_RadiologyQueueIsEmpty() {
+		assertNull(clinic.GetPatientRadiologyByNumberInQueue(0));
+	}
+	
+	@Test
 	public void WhenPatientComeWithMigraine_ThenHeIsFirstInMedecinQueue_AndNotInRadiologyQueue() {
 		clinic.triagePatient(FIRST_PATIENT_NAME, UNSPECIFIED_GRAVITY, VisibleSymptom.MIGRAINE);
 		
-		assertTrue(clinic.GetPatientMededcinByNumberInQueue(0).equals(FIRST_PATIENT_NAME));
+		assertTrue(clinic.GetPatientMedecinByNumberInQueue(0).equals(FIRST_PATIENT_NAME));
 		assertFalse(clinic.PatientIsInRadiologyQueue(FIRST_PATIENT_NAME));
 		
 	}
@@ -30,7 +40,7 @@ public class ClinicTest {
 		clinic.triagePatient(FIRST_PATIENT_NAME, UNSPECIFIED_GRAVITY, VisibleSymptom.MIGRAINE);
 		clinic.triagePatient(SECOND_PATIENT_NAME, UNSPECIFIED_GRAVITY, VisibleSymptom.FLU);
 		
-		assertTrue(clinic.GetPatientMededcinByNumberInQueue(1).equals(SECOND_PATIENT_NAME));
+		assertTrue(clinic.GetPatientMedecinByNumberInQueue(1).equals(SECOND_PATIENT_NAME));
 		assertFalse(clinic.PatientIsInRadiologyQueue(SECOND_PATIENT_NAME));
 	}
 	
@@ -38,7 +48,7 @@ public class ClinicTest {
 	public void WhenPatientComeWithSprain_ThenHeIsFirstInMedecinQueue_AndHeIsFirstInRadiologyQueue() {
 		clinic.triagePatient(FIRST_PATIENT_NAME, UNSPECIFIED_GRAVITY, VisibleSymptom.SPRAIN);
 		
-		assertTrue(clinic.GetPatientMededcinByNumberInQueue(0).equals(FIRST_PATIENT_NAME));
+		assertTrue(clinic.GetPatientMedecinByNumberInQueue(0).equals(FIRST_PATIENT_NAME));
 		assertTrue(clinic.GetPatientRadiologyByNumberInQueue(0).equals(FIRST_PATIENT_NAME));
 	}
 	
@@ -47,7 +57,7 @@ public class ClinicTest {
 		clinic.triagePatient(FIRST_PATIENT_NAME, UNSPECIFIED_GRAVITY, VisibleSymptom.SPRAIN);
 		clinic.triagePatient(SECOND_PATIENT_NAME, UNSPECIFIED_GRAVITY, VisibleSymptom.BROKEN_BONE);
 		
-		assertTrue(clinic.GetPatientMededcinByNumberInQueue(1).equals(SECOND_PATIENT_NAME));
+		assertTrue(clinic.GetPatientMedecinByNumberInQueue(1).equals(SECOND_PATIENT_NAME));
 		assertTrue(clinic.GetPatientRadiologyByNumberInQueue(1).equals(SECOND_PATIENT_NAME));
 	}
 	
@@ -58,7 +68,7 @@ public class ClinicTest {
 		clinic.triagePatient(FIRST_PATIENT_NAME, UNSPECIFIED_GRAVITY, VisibleSymptom.MIGRAINE);
 		clinic.triagePatient(SECOND_PATIENT_NAME, GRAVITY_GREATER_THAN_FIVE, VisibleSymptom.FLU);
 		
-		assertTrue(clinic.GetPatientMededcinByNumberInQueue(0).equals(SECOND_PATIENT_NAME));
+		assertTrue(clinic.GetPatientMedecinByNumberInQueue(0).equals(SECOND_PATIENT_NAME));
 	}
 	
 	@Test
@@ -71,4 +81,15 @@ public class ClinicTest {
 		assertTrue(clinic.GetPatientRadiologyByNumberInQueue(1).equals(SECOND_PATIENT_NAME));
 	}
 	
+	@Test
+	public void IfBothQueueIsGravity_WhileThereIsPatientInBothQueue_WhenPatientWithSprainWithGravitySeven_ThenHeIsFirstInBothQueue() {
+		clinic = new Clinic(TriageType.GRAVITY, TriageType.GRAVITY);
+		
+		clinic.triagePatient(FIRST_PATIENT_NAME, UNSPECIFIED_GRAVITY, VisibleSymptom.SPRAIN);
+		clinic.triagePatient(SECOND_PATIENT_NAME, GRAVITY_GREATER_THAN_FIVE, VisibleSymptom.BROKEN_BONE);
+		
+		assertTrue(clinic.GetPatientMedecinByNumberInQueue(0).equals(SECOND_PATIENT_NAME));
+		assertTrue(clinic.GetPatientRadiologyByNumberInQueue(0).equals(SECOND_PATIENT_NAME));
+		
+	}
 }

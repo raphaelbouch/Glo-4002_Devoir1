@@ -78,7 +78,7 @@ public class Clinic {
     	}
     }
     
-    public String GetPatientMededcinByNumberInQueue(int number) {
+    public String GetPatientMedecinByNumberInQueue(int number) {
     	if (medecinQueue.size() <= number) {
     		return null;
     	} else {
