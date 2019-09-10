@@ -2,6 +2,7 @@ import java.util.LinkedList;
 
 public class Clinic {
 	
+	private static final int MINIMUM_GRAVITY_FOR_SERVICE = 2;
 	private LinkedList<String> medecinQueue;
 	private LinkedList<String> radiologyQueue;
 	private TriageType medecinTriageType;
@@ -19,6 +20,10 @@ public class Clinic {
     }
 
     public void triagePatient(String name, int gravity, VisibleSymptom visibleSymptom) {
+    	if(gravity < MINIMUM_GRAVITY_FOR_SERVICE) {
+    		return;
+    	}
+    	
     	
     	if (this.medecinTriageType == TriageType.GRAVITY) {
     		TriageQueue.TriageGRAVITY(medecinQueue,name,gravity);

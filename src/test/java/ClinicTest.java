@@ -9,6 +9,7 @@ public class ClinicTest {
 	private static final int UNSPECIFIED_GRAVITY = 3;
 	private static final String SECOND_PATIENT_NAME = "Luke";
 	private static final int GRAVITY_GREATER_THAN_FIVE = 7;
+	private static final int GRAVITY_BELOW_MINIMUM = 1;
 	public Clinic clinic;
 	
 	@Before
@@ -90,6 +91,17 @@ public class ClinicTest {
 		
 		assertTrue(clinic.GetPatientMedecinByNumberInQueue(0).equals(SECOND_PATIENT_NAME));
 		assertTrue(clinic.GetPatientRadiologyByNumberInQueue(0).equals(SECOND_PATIENT_NAME));
-		
+	}
+	
+	@Test
+	public void WhenPatientComeWithColdGravityBelowMinimum_ThenPatientIsNotInMedecinQueue() {
+		clinic.triagePatient(FIRST_PATIENT_NAME, GRAVITY_BELOW_MINIMUM, VisibleSymptom.COLD);
+		assertFalse(clinic.PatientIsInMedecinQueue(FIRST_PATIENT_NAME));
+	}
+	
+	@Test
+	public void WhenPatientComeWithSprainGravityBelowMinimum_ThenPatientIsNotInRadiologyQueue() {
+		clinic.triagePatient(FIRST_PATIENT_NAME, GRAVITY_BELOW_MINIMUM, VisibleSymptom.SPRAIN);
+		assertFalse(clinic.PatientIsInRadiologyQueue(FIRST_PATIENT_NAME));
 	}
 }

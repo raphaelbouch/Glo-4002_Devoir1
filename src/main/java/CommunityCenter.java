@@ -2,6 +2,7 @@ import java.util.LinkedList;
 
 public class CommunityCenter {
 	
+	private static final int MINIMUM_GRAVITY_FOR_SERVICE = 2;
 	private LinkedList<String> nurseQueue;
 	private TriageType nurseTriageType;
 	
@@ -15,6 +16,10 @@ public class CommunityCenter {
     }
     
     public void triagePatient(String name, int gravity) {
+    	if(gravity < MINIMUM_GRAVITY_FOR_SERVICE) {
+    		return;
+    	}
+    	
         if(this.nurseTriageType == TriageType.FIFO) {
         	TriageQueue.TriageFIFO(nurseQueue, name);
         }else if(this.nurseTriageType == TriageType.GRAVITY) {

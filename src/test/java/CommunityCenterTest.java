@@ -9,6 +9,7 @@ public class CommunityCenterTest {
 	private static final int UNSPECIFIED_GRAVITY = 3;
 	private static final String SECOND_PATIENT_NAME = "Luke";
 	private static final int GRAVITY_GREATER_THAN_FIVE = 7;
+	private static final int GRAVITY_BELOW_MINIMUM = 1;
 	public CommunityCenter communityCenter;
 	
 	@Before
@@ -44,6 +45,12 @@ public class CommunityCenterTest {
 		communityCenter.triagePatient(SECOND_PATIENT_NAME, GRAVITY_GREATER_THAN_FIVE);
 		
 		assertTrue(communityCenter.GetPatientNurseByNumberInQueue(0).equals(SECOND_PATIENT_NAME));
+	}
+	
+	@Test
+	public void WhenPatientComeWithGravityBelowMinimum_ThenPatientIsNotInQueue() {
+		communityCenter.triagePatient(FIRST_PATIENT_NAME, GRAVITY_BELOW_MINIMUM);
+		assertFalse(communityCenter.PatientIsInNurseQueue(FIRST_PATIENT_NAME));
 	}
 
 }
