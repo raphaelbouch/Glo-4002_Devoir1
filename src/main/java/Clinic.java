@@ -3,42 +3,49 @@ import java.util.LinkedList;
 public class Clinic {
 	
 	private static final int GRAVITY_FOR_PRIORITY = 6;
-	private LinkedList<String> FileMedecin;
-	private LinkedList<String> FileRadiologie;
-	private TriageType triageType;
-	
+	private LinkedList<String> medecinQueue;
+	private LinkedList<String> radiologyQueue;
+	private TriageType medecinTriageType;
+	private TriageType radiologyTriageType;
+
 	public Clinic() {
-		this(TriageType.FIFO);
+		this(TriageType.FIFO, TriageType.FIFO);
 	}
 	
-    public Clinic(TriageType triageType) {
-    	FileMedecin = new LinkedList<String>();
-    	FileRadiologie = new LinkedList<String>();
-    	this.triageType = triageType;
+    public Clinic(TriageType medecinTriageType, TriageType radiologyTriageType) {
+    	medecinQueue = new LinkedList<String>();
+    	radiologyQueue = new LinkedList<String>();
+    	this.medecinTriageType = medecinTriageType;
+    	this.radiologyTriageType = radiologyTriageType;
     }
 
     public void triagePatient(String name, int gravity, VisibleSymptom visibleSymptom) {
-    	if (this.triageType == TriageType.GRAVITY) {
-    		TriageGRAVITY(name,gravity);
-    	}else if(this.triageType == TriageType.FIFO) {
-    		TriageFIFO(name);
+    	
+    	if (this.medecinTriageType == TriageType.GRAVITY) {
+    		TriageGRAVITY(medecinQueue,name,gravity);
+    	}else if(this.medecinTriageType == TriageType.FIFO) {
+    		TriageFIFO(medecinQueue,name);
     	}
     	
         if (SymptomRequireRadiology(visibleSymptom)) {
-        	FileRadiologie.add(name);
+        	if (this.radiologyTriageType == TriageType.GRAVITY) {
+        		TriageGRAVITY(radiologyQueue,name,gravity);
+        	}else if(this.radiologyTriageType == TriageType.FIFO) {
+        		TriageFIFO(radiologyQueue,name);
+        	}
         }
     	
     }
     
-    private void TriageFIFO(String name) {
-    	FileMedecin.add(name);
+    private void TriageFIFO(LinkedList<String> queue ,String name) {
+    	queue.add(name);
     }
     
-    private void TriageGRAVITY(String name, int gravity) {
+    private void TriageGRAVITY(LinkedList<String> queue, String name, int gravity) {
     	if (gravity < GRAVITY_FOR_PRIORITY ) {
-    		FileMedecin.add(name);
+    		queue.add(name);
     	} else {
-    		FileMedecin.addFirst(name);
+    		queue.addFirst(name);
     	}
     }
     
@@ -56,7 +63,7 @@ public class Clinic {
     }
     
     public boolean PatientIsInMedecinQueue(String name) {
-    	if (FileMedecin.contains(name)) {
+    	if (medecinQueue.contains(name)) {
     		return true;
     	} else {
     		return false;
@@ -64,7 +71,7 @@ public class Clinic {
     }
     
     public boolean PatientIsInRadiologyQueue(String name) {
-    	if (FileRadiologie.contains(name)) {
+    	if (radiologyQueue.contains(name)) {
     		return true;
     	} else {
     		return false;
@@ -72,18 +79,18 @@ public class Clinic {
     }
     
     public String GetPatientMededcinByNumberInQueue(int number) {
-    	if (FileMedecin.size() <= number) {
+    	if (medecinQueue.size() <= number) {
     		return null;
     	} else {
-    		return FileMedecin.get(number);
+    		return medecinQueue.get(number);
     	}
     }
     
     public String GetPatientRadiologyByNumberInQueue(int number) {
-    	if (FileRadiologie.size() <= number) {
+    	if (radiologyQueue.size() <= number) {
     		return null;
     	} else {
-    		return FileRadiologie.get(number);	
+    		return radiologyQueue.get(number);	
     	}
     }
 }

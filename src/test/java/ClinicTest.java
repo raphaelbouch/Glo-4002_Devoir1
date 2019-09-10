@@ -53,7 +53,7 @@ public class ClinicTest {
 	
 	@Test
 	public void IfMedecinQueueIsGravity_AndThereIsAPatientInMedecinQueue_WhenPatientWithFluGravitySevenCome_ThenPatientIsFirstInMedecinQueue() {
-		clinic = new Clinic(TriageType.GRAVITY);
+		clinic = new Clinic(TriageType.GRAVITY,TriageType.FIFO);
 		
 		clinic.triagePatient(FIRST_PATIENT_NAME, UNSPECIFIED_GRAVITY, VisibleSymptom.MIGRAINE);
 		clinic.triagePatient(SECOND_PATIENT_NAME, GRAVITY_GREATER_THAN_FIVE, VisibleSymptom.FLU);
@@ -63,7 +63,7 @@ public class ClinicTest {
 	
 	@Test
 	public void IfMedecinQueueIsGravity_WhileThereIsPatientInMedecinQueueAndRadiologyQueue_WhenPatientWithBrokenBoneGravitySeven_ThenHeIsSecondInRadiology() {
-		clinic = new Clinic(TriageType.GRAVITY);
+		clinic = new Clinic(TriageType.GRAVITY, TriageType.FIFO);
 		
 		clinic.triagePatient(FIRST_PATIENT_NAME, UNSPECIFIED_GRAVITY, VisibleSymptom.SPRAIN);
 		clinic.triagePatient(SECOND_PATIENT_NAME, GRAVITY_GREATER_THAN_FIVE, VisibleSymptom.BROKEN_BONE);
