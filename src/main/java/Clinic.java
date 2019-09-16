@@ -1,22 +1,20 @@
 import java.util.LinkedList;
 
-public class Clinic {
-	
-	private static final int MINIMUM_GRAVITY_FOR_SERVICE = 2;
-	private LinkedList<String> medecinQueue;
+public class Clinic extends MedicalClinic{
 	private LinkedList<String> radiologyQueue;
-	private TriageType medecinTriageType;
-	private TriageType radiologyTriageType;
+	private TriageInterface radiologyTriage;
 
 	public Clinic() {
-		this(TriageType.FIFO, TriageType.FIFO);
+		this(new TriageFIFO(), new TriageFIFO());
 	}
 	
-    public Clinic(TriageType medecinTriageType, TriageType radiologyTriageType) {
+    public Clinic(TriageInterface medecinTriageType, TriageInterface radiologyTriageType) {
     	medecinQueue = new LinkedList<String>();
     	radiologyQueue = new LinkedList<String>();
-    	this.medecinTriageType = medecinTriageType;
-    	this.radiologyTriageType = radiologyTriageType;
+    	
+    	this.medecinTriage = medecinTriageType;
+    	this.radiologyTriage = radiologyTriageType;
+
     }
 
     public void triagePatient(String name, int gravity, VisibleSymptom visibleSymptom) {
@@ -24,65 +22,23 @@ public class Clinic {
     		return;
     	}
     	
+    	this.medecinTriage.AddToQueue(medecinQueue, name, gravity);
     	
-    	if (this.medecinTriageType == TriageType.GRAVITY) {
-    		TriageQueue.TriageGRAVITY(medecinQueue,name,gravity);
-    	}else if(this.medecinTriageType == TriageType.FIFO) {
-    		TriageQueue.TriageFIFO(medecinQueue,name);
-    	}
-    	
-        if (SymptomRequireRadiology(visibleSymptom)) {
-        	if (this.radiologyTriageType == TriageType.GRAVITY) {
-        		TriageQueue.TriageGRAVITY(radiologyQueue,name,gravity);
-        	}else if(this.radiologyTriageType == TriageType.FIFO) {
-        		TriageQueue.TriageFIFO(radiologyQueue,name);
-        	}
+        if (visibleSymptom.requireRadiology) {
+        	this.radiologyTriage.AddToQueue(radiologyQueue, name, gravity);
         }
-    	
-    }
-    
-    public boolean SymptomRequireRadiology(VisibleSymptom visibleSymptom) {
-    	boolean RequireRadiology = false;
-    	
-    	if (visibleSymptom == VisibleSymptom.BROKEN_BONE){
-    		RequireRadiology = true;
-    	}
-    	if (visibleSymptom == VisibleSymptom.SPRAIN){
-    		RequireRadiology = true;
-    	}
-    	
-    	return RequireRadiology;
-    }
-    
-    public boolean PatientIsInMedecinQueue(String name) {
-    	if (medecinQueue.contains(name)) {
-    		return true;
-    	} else {
-    		return false;
-    	}
+        
     }
     
     public boolean PatientIsInRadiologyQueue(String name) {
-    	if (radiologyQueue.contains(name)) {
-    		return true;
-    	} else {
-    		return false;
-    	}
-    }
-    
-    public String GetPatientMedecinByNumberInQueue(int number) {
-    	if (medecinQueue.size() <= number) {
-    		return null;
-    	} else {
-    		return medecinQueue.get(number);
-    	}
+    	return radiologyQueue.contains(name);
     }
     
     public String GetPatientRadiologyByNumberInQueue(int number) {
-    	if (radiologyQueue.size() <= number) {
+    	try {
+    		return radiologyQueue.get(number);
+    	}catch (IndexOutOfBoundsException e) {
     		return null;
-    	} else {
-    		return radiologyQueue.get(number);	
     	}
     }
 }
